@@ -1,0 +1,61 @@
+再myOracle下
+--1.创建秒杀表空间
+ create tablespace user_data logging datafile 'C:\workspace\ScKill\Sckilldata\sckill.dbf'
+   size 50m autoextend on next 50m maxsize 200m;
+   --更改表空间名字
+   alter tablespace user_data rename to sckill_data;
+   --创建用户名密码:
+    create user sc_user identified by sc_password default tablespace SCKILL_data;
+	--赋予用户权限
+	 grant connect ,resource,dba to sc_user;
+	 
+	 
+	 --创建秒杀库存表
+		-- Create table
+create table SECKILL
+(
+  seckill_id  INTEGER not null,
+  sec_name    VARCHAR2(120) not null,
+  sec_number  INTEGER not null,
+  start_time  TIMESTAMP(6) not null,
+  end_time    TIMESTAMP(6) not null,
+  create_time TIMESTAMP(6) not null
+)
+tablespace SCKILL_DATA
+  pctfree 10
+  initrans 1
+  maxtrans 255;
+-- Add comments to the columns 
+comment on column SECKILL.seckill_id
+  is 'id';
+comment on column SECKILL.sec_name
+  is '商品名';
+comment on column SECKILL.sec_number
+  is '库存';
+comment on column SECKILL.start_time
+  is '开始时间';
+comment on column SECKILL.end_time
+  is '结束时间';
+comment on column SECKILL.create_time
+  is '创建时间';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table SECKILL
+  add constraint SC_KEY primary key (SECKILL_ID)
+  using index 
+  tablespace SCKILL_DATA
+  pctfree 10
+  initrans 2
+  maxtrans 255;
+  --创建秒杀成功明细表
+  --用户登陆信息
+  create table success_killed(
+  seckill_id bigint,
+  user_phone bigint,
+  create_time
+  )
+
+  --插入数据集
+    insert into seckill (seckill_id,sec_name,sec_number ,start_time,end_time,create_time) values(1,'1000秒杀iphone6',100,sysdate,sysdate,sysdate)
+    insert into seckill (seckill_id,sec_name,sec_number ,start_time,end_time,create_time) values(2,'500秒杀iphone4',100,sysdate,sysdate,sysdate);
+      insert into seckill (seckill_id,sec_name,sec_number ,start_time,end_time,create_time) values(3,'300秒杀小米5',100,sysdate,sysdate,sysdate);
+        insert into seckill (seckill_id,sec_name,sec_number ,start_time,end_time,create_time) values(4,'200秒杀红米2',100,sysdate,sysdate,sysdate);
